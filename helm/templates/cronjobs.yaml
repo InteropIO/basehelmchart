@@ -1,0 +1,8 @@
+{{- range .Values.cronjobs }}
+  apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    name: {{- .name }}
+  spec:
+    {{- toYaml .spec | nindent 2 }}
+{{- end }}

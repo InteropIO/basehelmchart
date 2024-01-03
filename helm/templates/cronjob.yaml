@@ -1,0 +1,10 @@
+{{- if .Values.cronjob -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "helm.fullname" . }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+spec:
+  {{- toYaml .Values.cronjob.spec | nindent 2 }}
+{{- end }}

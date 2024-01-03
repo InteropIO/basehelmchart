@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: {{ .Values.kind }}
+metadata:
+  name: {{ include "helm.fullname" . }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+  {{- with .Values.deploymentAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
+spec:
+  {{- if eq .Values.kind "StatefulSet" }}
+  serviceName: {{ .Release.Name }}
+  {{- end }}
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "helm.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "helm.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
+      containers:
+        - name: {{ .Release.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: {{- toYaml .Values.image.command | nindent 12 }}
+          ports:
+            {{- toYaml .Values.image.ports | nindent 12 }}
+          livenessProbe:
+            {{- toYaml .Values.image.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.image.readinessProbe | nindent 12 }}
+          startupProbe:
+            {{- toYaml .Values.image.startupProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.image.resources | nindent 12 }}
+          args:
+            {{- toYaml .Values.image.args | nindent 12 }}
+          env:
+            {{- toYaml .Values.image.env | nindent 12 }}
+          envFrom:
+            {{- toYaml .Values.image.envFrom | nindent 12 }}
+          {{- if .Values.image.volumeMounts  }}
+          volumeMounts:
+            {{- toYaml .Values.image.volumeMounts | nindent 12 }}
+          {{- end }}
+      {{- if .Values.image.volumes  }}
+      volumes:
+        {{- toYaml .Values.image.volumes | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+      {{- else }}
+      affinity: 
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: "app.kubernetes.io/name"
+                      operator: In
+                      values:
+                        - {{ include "helm.fullname" . }}
+                topologyKey: "eks.amazonaws.com/nodegroup"
+          # requiredDuringSchedulingIgnoredDuringExecution:
+          # - labelSelector:
+          #     matchExpressions:
+          #     - key: "eks.amazonaws.com/capacityType"
+          #       operator: In
+          #       values:
+          #       - SPOT
+          #   topologyKey: "eks.amazonaws.com/nodegroup"
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
