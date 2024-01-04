@@ -1,12 +1,14 @@
-{{- if .Values.configmap }}
+{{- if .Values.configmaps }}
+{{- range .Values.configmaps }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "helm.fullname" . }}
+  name: {{ .name }}
   labels:
-    {{- include "helm.labels" . | nindent 4 }}
   annotations:
-    {{- toYaml .Values.configmap.annotations | nindent 8 }}
+   {{- toYaml .annotations | nindent 8 }}
 data:
-  {{- toYaml .Values.configmap.data | nindent 2 }}
+  {{- toYaml .data | nindent 2 }}
+---
+{{- end }}
 {{- end }}
