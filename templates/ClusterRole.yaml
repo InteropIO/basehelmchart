@@ -1,0 +1,8 @@
+{{- if .Values.ClusterRole }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "helm.fullname" . }}
+rules:
+   {{- toYaml .Values.ClusterRole.rules | nindent 4 }}
+{{- end }}
