@@ -65,3 +65,14 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Common annotations
+*/}}
+{{- define "helm.annotations" -}}
+{{- if .Values.additionalAnnotations }}
+{{- with .Values.additionalAnnotations }}
+{{- toYaml . | nindent 0 }}
+{{- end }}
+{{- end }}
+{{- end }}
