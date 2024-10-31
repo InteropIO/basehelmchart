@@ -4,8 +4,8 @@ metadata:
   name: {{ include "helm.fullname" . }}
   labels:
     {{- include "helm.labels" . | nindent 4 }}
-  {{- with .Values.deploymentAnnotations }}
   annotations:
+  {{- with .Values.deploymentAnnotations }}
     {{- toYaml . | nindent 8 }}
   {{- end }}
 spec:
