@@ -6,10 +6,10 @@ metadata:
   name: {{ .name }}
   labels:
   annotations:
-  {{- toYaml .annotations | nindent 8 }}
+    {{- toYaml .annotations | nindent 8 }}
+    {{- toYaml .annotations | nindent 8 }}
       {{- with .Values.deploymentAnnotations }}
     {{- toYaml . | nindent 8 }}
-  {{- end }}
 data:
   {{- toYaml .data | nindent 2 }}
 ---
