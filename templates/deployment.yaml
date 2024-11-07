@@ -86,7 +86,7 @@ spec:
                       operator: In
                       values:
                         - {{ include "helm.fullname" . }}
-                topologyKey: "eks.amazonaws.com/nodegroup"
+                topologyKey: "kubernetes.io/hostname"
           # requiredDuringSchedulingIgnoredDuringExecution:
           # - labelSelector:
           #     matchExpressions:
