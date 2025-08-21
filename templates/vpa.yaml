@@ -8,7 +8,7 @@ metadata:
 spec:
   targetRef:
     apiVersion: apps/v1
-    kind: Deployment
+    kind: {{ .Values.kind }}
     name: {{ include "helm.fullname" . }}
   {{- with .Values.vpa.resourcePolicy }}
   resourcePolicy:
