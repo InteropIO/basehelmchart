@@ -1,0 +1,25 @@
+{{- if .Values.vertical-autoscaling.enabled }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "helm.fullname" . }}
+  labels:
+    {{- include "helm.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "helm.fullname" . }}
+  resourcePolicy:
+    {{ .Values.vertical-autoscaling.resourcePolicy | nindent 4 }}
+  #   containerPolicies:
+  # metrics:
+  #   {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+  #   - type: Resource
+  #     resource:
+  #       name: cpu
+  #       target:
+  #         averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+  #         type: {{ .Values.autoscaling.targetType }}
+  #   {{- end }}
+{{- end }}
