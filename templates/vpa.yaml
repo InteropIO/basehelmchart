@@ -10,16 +10,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "helm.fullname" . }}
-  # resourcePolicy:
-    {{ .Values.vertical-autoscaling.resourcePolicy | nindent 4 }}
-  #   containerPolicies:
-  # metrics:
-  #   {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
-  #   - type: Resource
-  #     resource:
-  #       name: cpu
-  #       target:
-  #         averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
-  #         type: {{ .Values.autoscaling.targetType }}
-  #   {{- end }}
+  {{- with .Values.vpa.resourcePolicy }}
+  resourcePolicy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
