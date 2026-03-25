@@ -100,8 +100,9 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+  {{- if .Values.strategy }}
   strategy:
-    {{- toYaml .Values.strategy | nindent 8 }}
+    {{- toYaml .Values.strategy | nindent 4 }}
   {{- else }}
   strategy: 
     type: Recreate
