@@ -100,10 +100,12 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- if eq .Values.kind "Deployment" }}
   {{- if .Values.strategy }}
   strategy:
     {{- toYaml .Values.strategy | nindent 4 }}
   {{- else }}
-  strategy: 
+  strategy:
     type: Recreate
   {{- end }}
+{{- end }}
