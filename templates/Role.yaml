@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ include "helm.fullname" . }}
-  # namespace: {{ .Release.Namespace }}
+  namespace: {{ . }}
 rules:
    {{- toYaml .Values.Role.rules | nindent 4 }}
 {{- end }}
