@@ -5,5 +5,5 @@ metadata:
   name: {{ include "helm.fullname" . }}
   namespace: {{ .Release.Namespace }}
 rules:
-   {{- toYaml .Values.Role.rules | nindent 4 }}
+   {{ toYaml .Values.Role.rules | nindent 2 }}
 {{- end }}
