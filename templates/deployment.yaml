@@ -74,6 +74,9 @@ spec:
           volumeMounts:
             {{- toYaml .Values.image.volumeMounts | nindent 12 }}
           {{- end }}
+        {{- with .Values.sidecars }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       {{- if .Values.image.volumes  }}
       volumes:
         {{- toYaml .Values.image.volumes | nindent 8 }}
