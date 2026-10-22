@@ -81,7 +81,7 @@ autoscaling:
   UPstabilizationWindowSeconds: 30
 
 vpa:
-  enabled: true
+  enabled: false
   resourcePolicy:
     containerPolicies:
       - containerName: '*'
